@@ -6,7 +6,7 @@ class UserService {
     try {
       const user = await User.query()
         .select('*')
-        .orderBy('id_associacao')
+        .orderBy('id_user')
 
         user.map(() => {} )
 
