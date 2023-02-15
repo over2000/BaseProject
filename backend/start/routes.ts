@@ -21,5 +21,14 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/', async () => {
-  return { hello: 'world' }
+  return { hello: 'BASE API' }
 })
+
+Route.group(() => {
+  Route.get('user-list', 'UserController.index')
+  Route.post('user', 'UserController.store')
+  Route.get('/user/:id', 'UserController.show')
+  Route.put('/user-put/:id', 'UserController.update')
+  Route.delete('user-delete/:id', 'UserController.destroy')
+})
+.prefix('api')
