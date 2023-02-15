@@ -7,12 +7,18 @@ export default class User extends BaseModel{
   public id_user: Number
 
   @column()
-  public in_ativo: Boolean
-
-  @column()
   public name: String
 
   @column()
+  public email: String
+
+  @column()
+  public password: string
+
+  @column()
   public function: String
+
+  @column()
+  public in_ativo: Boolean
 
 }
