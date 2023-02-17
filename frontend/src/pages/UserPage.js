@@ -1,7 +1,9 @@
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { errorHandling } from 'src/components/SnackBar';
+import { useSnackbar } from 'notistack'
 // @mui
 import {
   Card,
@@ -146,6 +148,41 @@ export default function UserPage() {
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
+  const [users, setUsers] = useState([]);
+
+  // useEffect(() => {
+  //   carregaData();
+  // }, []);
+
+  const [alert, setAlert] = useState(false);
+  const [alertContent, setAlertContent] = useState('');
+
+  const { enqueueSnackbar } = useSnackbar()
+
+  const carregaData = () => {
+
+    function handleErrors(response) {
+      if (!response.ok) {
+        throw Error(response.status);
+      }
+      return response;
+    }
+
+    fetch('http://127.0.0.1:3333/api/user-listt')
+      .then(handleErrors)
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        setUsers(data)
+      })
+      .catch(error => { errorHandling('404', enqueueSnackbar) }
+        // 
+      );
+  }
+
+  console.log(users)
+
   return (
     <>
       <Helmet>
@@ -157,7 +194,9 @@ export default function UserPage() {
           <Typography variant="h4" gutterBottom>
             User
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button
+            onClick={carregaData}
+            variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
             New User
           </Button>
         </Stack>
