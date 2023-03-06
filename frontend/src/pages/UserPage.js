@@ -31,16 +31,14 @@ import Scrollbar from '../components/scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
-import USERLIST from '../_mock/user';
+//import users from '../_mock/user';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
   { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
+  { id: 'in_ativo', label: 'Ativo', alignRight: false },
   { id: '' },
 ];
 
@@ -76,6 +74,10 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function UserPage() {
+
+
+  const [users, setUsers] = useState([]);
+
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -89,6 +91,33 @@ export default function UserPage() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const { enqueueSnackbar } = useSnackbar()
+
+  useEffect(() => {
+    carregaData()
+  }, []);
+
+  const carregaData = () => {
+    function handleErrors(response) {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      return response;
+    }
+
+    fetch('http://127.0.0.1:3333/api/user-list')
+      .then(handleErrors)
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        setUsers(data)
+      })
+      .catch((error) => {
+        errorHandling(error.message, enqueueSnackbar)
+      });
+  }
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -106,7 +135,7 @@ export default function UserPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = users.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -142,49 +171,17 @@ export default function UserPage() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(users, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
-  const [users, setUsers] = useState([]);
-
-  // useEffect(() => {
-  //   carregaData();
-  // }, []);
-
-  const [alert, setAlert] = useState(false);
-  const [alertContent, setAlertContent] = useState('');
-
-  const { enqueueSnackbar } = useSnackbar()
-
-  const carregaData = () => {
-
-    function handleErrors(response) {
-      if (!response.ok) {
-        throw new Error(response.status);
-      }
-      return response;
-    }
-
-    fetch('http://127.0.0.1:3333/api/user-listt')
-      .then(handleErrors)
-      .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
-        setUsers(data)
-      })
-      .catch((error) => {
-        errorHandling(error.message, enqueueSnackbar)
-      });
-  }
-
-  console.log('users', users)
-
   return (
     <>
+
+
+
       <Helmet>
         <title> User </title>
       </Helmet>
@@ -195,7 +192,7 @@ export default function UserPage() {
             User
           </Typography>
           <Button
-            onClick={carregaData}
+            //onClick={carregaData}
             variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
             New User
           </Button>
@@ -205,46 +202,45 @@ export default function UserPage() {
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
           <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}>
+            <TableContainer sx={{ minWidth: 600 }}>
               <Table>
                 <UserListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
+                  rowCount={users.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, key) => {
+                    const { id, name, role, in_ativo } = row;
                     const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
-                      <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
+                      <TableRow hover key={key} tabIndex={-1} role="checkbox" selected={selectedUser}>
                         <TableCell padding="checkbox">
                           <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
                         </TableCell>
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
+                            <Avatar alt={name} />
                             <Typography variant="subtitle2" noWrap>
                               {name}
                             </Typography>
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="left">{company}</TableCell>
 
                         <TableCell align="left">{role}</TableCell>
 
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
+                        <TableCell align="left">{in_ativo ? 'Yes' : 'No'}</TableCell>
 
-                        <TableCell align="left">
+                        {/* <TableCell align="left">
                           <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
-                        </TableCell>
+                        </TableCell> */}
 
                         <TableCell align="right">
                           <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
@@ -291,7 +287,7 @@ export default function UserPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={users.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
