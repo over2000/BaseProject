@@ -163,7 +163,7 @@ export default function UserPage() {
 
     function handleErrors(response) {
       if (!response.ok) {
-        throw Error(response.status);
+        throw new Error(response.status);
       }
       return response;
     }
@@ -176,12 +176,13 @@ export default function UserPage() {
       .then((data) => {
         setUsers(data)
       })
-      .catch(error => { errorHandling('404', enqueueSnackbar) }
-        // 
-      );
+      .catch((error) => {
+        console.log('erro', error.message)
+        errorHandling(error.message, enqueueSnackbar)
+      });
   }
 
-  console.log(users)
+  console.log('users', users)
 
   return (
     <>
