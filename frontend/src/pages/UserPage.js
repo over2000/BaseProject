@@ -177,7 +177,6 @@ export default function UserPage() {
         setUsers(data)
       })
       .catch((error) => {
-        console.log('erro', error.message)
         errorHandling(error.message, enqueueSnackbar)
       });
   }
