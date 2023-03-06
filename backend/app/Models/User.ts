@@ -16,7 +16,7 @@ export default class User extends BaseModel{
   public password: string
 
   @column()
-  public function: String
+  public role: String
 
   @column()
   public in_ativo: Boolean
