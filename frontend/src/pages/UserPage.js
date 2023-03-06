@@ -75,6 +75,7 @@ function applySortFilter(array, comparator, query) {
 
 export default function UserPage() {
 
+  const [idUser, setIdUser] = useState('');
 
   const [users, setUsers] = useState([]);
 
@@ -93,6 +94,8 @@ export default function UserPage() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const { enqueueSnackbar } = useSnackbar()
+
+  console.log('ID USER', idUser)
 
   useEffect(() => {
     carregaData()
@@ -119,8 +122,33 @@ export default function UserPage() {
       });
   }
 
-  const handleOpenMenu = (event) => {
+
+  const deleta = (id) => {
+    function handleErrors(response) {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      return response;
+    }
+
+    fetch('http://127.0.0.1:3333/api/user-delete/' + id, {
+      method: 'DELETE',
+    })
+      .then(handleErrors)
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        carregaData()
+      })
+      .catch((error) => {
+        errorHandling(error.message, enqueueSnackbar)
+      });
+  }
+
+  const handleOpenMenu = (event, id) => {
     setOpen(event.currentTarget);
+    setIdUser(id);
   };
 
   const handleCloseMenu = () => {
@@ -177,10 +205,10 @@ export default function UserPage() {
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
+  console.log(users)
+
   return (
     <>
-
-
 
       <Helmet>
         <title> User </title>
@@ -215,7 +243,7 @@ export default function UserPage() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, key) => {
-                    const { id, name, role, in_ativo } = row;
+                    const { id_user, name, role, in_ativo } = row;
                     const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
@@ -243,7 +271,7 @@ export default function UserPage() {
                         </TableCell> */}
 
                         <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
+                          <IconButton size="large" color="inherit" onClick={(event) => handleOpenMenu(event, id_user)} >
                             <Iconify icon={'eva:more-vertical-fill'} />
                           </IconButton>
                         </TableCell>
@@ -297,6 +325,7 @@ export default function UserPage() {
       </Container>
 
       <Popover
+        idUser={idUser}
         open={Boolean(open)}
         anchorEl={open}
         onClose={handleCloseMenu}
@@ -314,12 +343,15 @@ export default function UserPage() {
           },
         }}
       >
-        <MenuItem>
+        <MenuItem
+        >
           <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
           Edit
         </MenuItem>
 
-        <MenuItem sx={{ color: 'error.main' }}>
+        <MenuItem
+          onClick={() => deleta(idUser)}
+          sx={{ color: 'error.main' }}>
           <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
           Delete
         </MenuItem>
