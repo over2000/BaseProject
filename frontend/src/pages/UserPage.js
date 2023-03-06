@@ -136,10 +136,8 @@ export default function UserPage() {
     })
       .then(handleErrors)
       .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
         carregaData()
+        return response.json()
       })
       .catch((error) => {
         errorHandling(error.message, enqueueSnackbar)
