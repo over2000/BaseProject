@@ -28,6 +28,7 @@ import {
 import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
+import CreateUserForm from 'src/components/create-user-form/CreateUserForm';
 // sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
@@ -93,6 +94,8 @@ export default function UserPage() {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  const [openModal, setOpenModal] = useState(false);
+
   const { enqueueSnackbar } = useSnackbar()
 
   console.log('ID USER', idUser)
@@ -109,7 +112,7 @@ export default function UserPage() {
       return response;
     }
 
-    fetch('http://127.0.0.1:3333/api/user-list')
+    fetch('http://127.0.0.1:42097/api/user-list')
       .then(handleErrors)
       .then((response) => {
         return response.json()
@@ -131,7 +134,7 @@ export default function UserPage() {
       return response;
     }
 
-    fetch('http://127.0.0.1:3333/api/user-delete/' + id, {
+    fetch('http://127.0.0.1:42097/api/user-delete/' + id, {
       method: 'DELETE',
     })
       .then(handleErrors)
@@ -203,6 +206,14 @@ export default function UserPage() {
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
+  const handleClickOpen = () => {
+    setOpenModal(true);
+  };
+
+  const handleOpen = () => {
+    setOpenModal(!openModal);
+  };
+
   console.log(users)
 
   return (
@@ -218,11 +229,16 @@ export default function UserPage() {
             User
           </Typography>
           <Button
-            //onClick={carregaData}
+            onClick={handleOpen}
             variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
             New User
           </Button>
         </Stack>
+
+        <CreateUserForm
+          isDialogOpened={openModal}
+          handleCloseDialog={() => setOpen(false)}
+        />
 
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
