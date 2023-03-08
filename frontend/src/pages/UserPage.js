@@ -112,7 +112,7 @@ export default function UserPage() {
       return response;
     }
 
-    fetch('http://127.0.0.1:42097/api/user-list')
+    fetch('http://127.0.0.1:3333/api/user-list')
       .then(handleErrors)
       .then((response) => {
         return response.json()
@@ -134,7 +134,7 @@ export default function UserPage() {
       return response;
     }
 
-    fetch('http://127.0.0.1:42097/api/user-delete/' + id, {
+    fetch('http://127.0.0.1:3333/api/user-delete/' + id, {
       method: 'DELETE',
     })
       .then(handleErrors)
@@ -206,9 +206,6 @@ export default function UserPage() {
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
-  const handleClickOpen = () => {
-    setOpenModal(true);
-  };
 
   const handleOpen = () => {
     setOpenModal(!openModal);
@@ -237,7 +234,7 @@ export default function UserPage() {
 
         <CreateUserForm
           isDialogOpened={openModal}
-          handleCloseDialog={() => setOpen(false)}
+          handleCloseDialog={() => setOpenModal(false)}
         />
 
         <Card>

@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from "react";
-import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
-import Dialog from '@mui/material/Dialog';
-import Fade from '@mui/material/Fade';
-import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
 
-export default function CreateUserForm(isDialogOpened, handleCloseDialog) {
+export default function CreateUserForm({ isDialogOpened, handleCloseDialog }) {
 
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 
   useEffect(() => {
     handleClickOpen();
@@ -33,7 +31,7 @@ export default function CreateUserForm(isDialogOpened, handleCloseDialog) {
 
   return (
     <div>
-      <Dialog
+      <Modal
         open={isDialogOpened}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -47,7 +45,7 @@ export default function CreateUserForm(isDialogOpened, handleCloseDialog) {
             Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
           </Typography>
         </Box>
-      </Dialog>
+      </Modal>
     </div>
   );
 }
