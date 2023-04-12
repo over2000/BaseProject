@@ -1,7 +1,7 @@
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class User extends BaseModel{
-  public static table = 'base.tb_user'
+  public static table = 'base.users'
 
   @column({ isPrimary: true })
   public id_user: Number
