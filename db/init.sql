@@ -7,5 +7,5 @@ CREATE TABLE base.users (
   senha VARCHAR(255) NOT NULL,
   id_funcao INT,
   desc_funcao VARCHAR(99),
-  in_ativo: Boolean,
-);
+  in_ativo Boolean
+)
