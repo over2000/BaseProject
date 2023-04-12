@@ -112,7 +112,7 @@ export default function UserPage() {
       return response;
     }
 
-    fetch('http://127.0.0.1:3333/api/user-list')
+    fetch(`${process.env.REACT_APP_BACKEND_URL}user-list`)
       .then(handleErrors)
       .then((response) => {
         return response.json()
@@ -134,7 +134,7 @@ export default function UserPage() {
       return response;
     }
 
-    fetch('http://127.0.0.1:3333/api/user-delete/' + id, {
+    fetch(`${process.env.REACT_APP_BACKEND_URL}user-delete/` + id, {
       method: 'DELETE',
     })
       .then(handleErrors)
