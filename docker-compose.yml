@@ -15,7 +15,7 @@ services:
     networks:
       - app-network
     depends_on:
-      - pg
+      - postgres_db
   backend:
     container_name: backend
     build: 
