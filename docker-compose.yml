@@ -12,6 +12,10 @@ services:
       - "3001:3000"
     env_file:
       - ./frontend/.env
+    networks:
+      - app-network
+    depends_on:
+      - pg
   backend:
     container_name: backend
     build: 
@@ -21,3 +25,29 @@ services:
       - "3331:3333"
     env_file:
       - ./backend/.env
+    networks:
+      - app-network
+  postgres_db:
+    container_name: postgres_db
+    image: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: baseproject
+    ports:
+      - "5469:5432"
+    networks:
+      - app-network
+    volumes:
+      - database_data:/var/lib/postgresql/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  database_data:
+    driver: local
+
