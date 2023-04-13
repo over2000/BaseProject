@@ -1,5 +1,5 @@
 FROM postgres:latest
-ENV POSTGRES_DB mydatabase
-ENV POSTGRES_USER myuser
+ENV POSTGRES_DB baseproject
+ENV POSTGRES_USER user
 ENV POSTGRES_PASSWORD mypassword
 COPY init.sql /docker-entrypoint-initdb.d/
