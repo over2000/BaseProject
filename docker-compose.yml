@@ -4,7 +4,7 @@ services:
     container_name: frontend
     build:
       context: ./frontend
-      dockerfile: ./frontend/dockerfile
+      dockerfile: dockerfile
     volumes:
     - .:/home/node/app
     - /home/node/app/node_modules
@@ -20,7 +20,7 @@ services:
     container_name: backend
     build: 
       context: ./backend
-      dockerfile: ./backend/dockerfile
+      dockerfile: dockerfile
     ports:
       - "3331:3333"
     env_file:
