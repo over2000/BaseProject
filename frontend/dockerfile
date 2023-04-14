@@ -1,4 +1,4 @@
-FROM node:lts-alpine
+FROM node:18-alpine
 
 RUN npm config set strict-ssl=false
 
@@ -9,5 +9,6 @@ COPY . /usr/src
 
 EXPOSE 3000
 
-RUN npm install
+RUN npm install --force 
+
 CMD ["npm", "start"]
