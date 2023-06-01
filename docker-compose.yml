@@ -2,20 +2,50 @@ version: "3.9"
 services:
   frontend:
     container_name: frontend
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: dockerfile
+    volumes:
+    - .:/home/node/app
+    - /home/node/app/node_modules
     ports:
-      - "3003:3003"
+      - "3001:3000"
+    env_file:
+      - ./frontend/.env
+    networks:
+      - app-network
     depends_on:
-      - backend
+      - postgres_db
   backend:
     container_name: backend
-    build: ./backend
+    build: 
+      context: ./backend
+      dockerfile: dockerfile
     ports:
-      - "3333:3333"
-    depends_on:
-      - db
-  db:
-    container_name: db
-    build: ./db
+      - "3331:3333"
+    env_file:
+      - ./backend/.env
+    networks:
+      - app-network
+  postgres_db:
+    container_name: postgres_db
+    build: 
+      context: ./db
+      dockerfile: dockerfile
     ports:
-      - "5469:5469"
+      - "5469:5432"
+    networks:
+      - app-network
+    volumes:
+      - database_data:/var/lib/postgresql/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  database_data:
+    driver: local
+
