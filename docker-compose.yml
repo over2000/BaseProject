@@ -33,7 +33,7 @@ services:
       context: ./db
       dockerfile: dockerfile
     ports:
-      - "5469:5432"
+      - "5432:5432"
     networks:
       - app-network
     volumes:
