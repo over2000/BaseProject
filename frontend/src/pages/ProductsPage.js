@@ -9,7 +9,7 @@ import PRODUCTS from '../_mock/products';
 
 import Iconify from '../components/iconify';
 
-import CreateUserForm from 'src/components/create-user-form/CreateUserForm';
+import CreateCarForm from 'src/components/create-user-form/CreateUserForm';
 
 // ----------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ export default function ProductsPage() {
           Cadastrar Carro
         </Button>
 
-        <CreateUserForm
+        <CreateCarForm
           isDialogOpened={openModal}
           handleCloseDialog={() => setOpenModal(false)}
         />
