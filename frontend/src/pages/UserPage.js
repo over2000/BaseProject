@@ -28,7 +28,7 @@ import {
 import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
-import CreateUserForm from 'src/components/create-user-form/CreateUserForm';
+import CreateCarForm from 'src/components/create-user-form/CreateUserForm';
 // sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
@@ -232,7 +232,7 @@ export default function UserPage() {
           </Button>
         </Stack>
 
-        <CreateUserForm
+        <CreateCarForm
           isDialogOpened={openModal}
           handleCloseDialog={() => setOpenModal(false)}
         />
