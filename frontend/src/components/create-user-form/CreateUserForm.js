@@ -6,7 +6,7 @@ import {
   TextField
 } from '@mui/material';
 
-export default function CreateUserForm({ isDialogOpened, handleCloseDialog }) {
+export default function CreateCarForm({ isDialogOpened, handleCloseDialog }) {
 
 
   const style = {
